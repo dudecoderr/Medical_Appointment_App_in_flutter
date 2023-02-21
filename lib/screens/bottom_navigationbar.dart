@@ -24,6 +24,7 @@ class _BottomNavigationTabState extends State<BottomNavigationTab> {
           showElevation: false,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           itemCornerRadius: 10.r,
+          containerHeight: 60.h,
           iconSize: 22.sp,
           onItemSelected: (index) => setState(() {
             currentIndex = index;
