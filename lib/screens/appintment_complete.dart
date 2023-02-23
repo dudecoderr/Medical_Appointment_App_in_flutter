@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:medical_appointment_app/constant/constant.dart';
 import 'package:medical_appointment_app/constant/text_widget.dart';
+import 'package:medical_appointment_app/screens/bottom_navigationbar.dart';
+import 'package:page_transition/page_transition.dart';
 
 class AppointmentCompleteScreen extends StatefulWidget {
   const AppointmentCompleteScreen({Key? key}) : super(key: key);
@@ -12,7 +14,6 @@ class AppointmentCompleteScreen extends StatefulWidget {
 }
 
 class _AppointmentConpleteScreenState extends State<AppointmentCompleteScreen> with TickerProviderStateMixin {
-  AnimationController? _controller;
   bool isComplete = false;
   bool animate = false;
 
@@ -28,7 +29,7 @@ class _AppointmentConpleteScreenState extends State<AppointmentCompleteScreen> w
   }
 
   startAnimation() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 800));
     setState(() {
       animate = true;
       buttonW = 330.w;
@@ -38,15 +39,6 @@ class _AppointmentConpleteScreenState extends State<AppointmentCompleteScreen> w
 
   @override
   void initState() {
-    _controller = AnimationController(
-      vsync: this,
-    );
-    // _controller!.duration = _controller!.duration!.forward();
-    // _controller!.addListener(() {
-    // if (_controller!.isCompleted) {
-    //   _controller!.stop();
-    // }
-    // });
     buttonOpacity();
     startAnimation();
     super.initState();
@@ -54,7 +46,6 @@ class _AppointmentConpleteScreenState extends State<AppointmentCompleteScreen> w
 
   @override
   Widget build(BuildContext context) {
-    print("object  111 ${isComplete}");
     return Scaffold(
       backgroundColor: kLightBlue,
       body: Stack(
@@ -68,6 +59,11 @@ class _AppointmentConpleteScreenState extends State<AppointmentCompleteScreen> w
                   opacity: opacity,
                   duration: const Duration(milliseconds: 600),
                   curve: Curves.easeIn,
+                  onEnd: () {
+                    setState(() {
+                      isComplete = true;
+                    });
+                  },
                   child: Container(
                     height: 60.h,
                     width: 60.h,
@@ -76,15 +72,12 @@ class _AppointmentConpleteScreenState extends State<AppointmentCompleteScreen> w
                       color: kLightGreen,
                       borderRadius: BorderRadius.circular(11.r),
                     ),
-                    child: Lottie.asset(
-                      'assets/lottie/completed.json',
-                      // controller: _controller,
-                      // onLoaded: (composition) {
-                      //   _controller!
-                      //     ..duration = composition.duration
-                      //     ..stop();
-                      // },
-                    ),
+                    child: isComplete
+                        ? Lottie.asset(
+                            'assets/lottie/completed.json',
+                            repeat: false,
+                          )
+                        : const SizedBox(),
                   ),
                 ),
                 AnimatedOpacity(
@@ -111,7 +104,7 @@ class _AppointmentConpleteScreenState extends State<AppointmentCompleteScreen> w
                   ),
                 ),
                 SizedBox(height: 20.h),
-                Spacer(),
+                const Spacer(),
 
                 /// ok button
                 Center(
@@ -119,21 +112,36 @@ class _AppointmentConpleteScreenState extends State<AppointmentCompleteScreen> w
                     opacity: opacity,
                     duration: const Duration(seconds: 1),
                     curve: Curves.easeInOut,
-                    child: AnimatedContainer(
-                      duration: const Duration(seconds: 1),
-                      height: buttonH,
-                      width: buttonW,
-                      margin: EdgeInsets.only(top: 90.h, bottom: 30.h),
-                      decoration: BoxDecoration(
-                        color: kWhiteColor,
-                        borderRadius: BorderRadius.circular(15.r),
-                      ),
-                      child: Center(
-                        child: CustomText(
-                          'Ok, thanks',
-                          fontSize: 16.sp,
-                          color: kLightBlue,
-                          fontWeight: FontWeight.w500,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          PageTransition(
+                            curve: Curves.easeInOut,
+                            type: PageTransitionType.leftToRight,
+                            alignment: Alignment.center,
+                            duration: const Duration(milliseconds: 800),
+                            child: const BottomNavigationTab(),
+                          ),
+                          (route) => false,
+                        );
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(seconds: 1),
+                        height: buttonH,
+                        width: buttonW,
+                        margin: EdgeInsets.only(top: 90.h, bottom: 30.h),
+                        decoration: BoxDecoration(
+                          color: kWhiteColor,
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        child: Center(
+                          child: CustomText(
+                            'Ok, thanks',
+                            fontSize: 16.sp,
+                            color: kLightBlue,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),
@@ -144,11 +152,11 @@ class _AppointmentConpleteScreenState extends State<AppointmentCompleteScreen> w
           ),
           AnimatedPositioned(
             top: 320.h,
-            right: animate ? 15.w : -330.w,
+            right: animate ? 15.w : -315.w,
             duration: const Duration(seconds: 1),
             child: Container(
               height: 65.h,
-              width: 330.h,
+              width: 330.w,
               margin: EdgeInsets.only(bottom: 15.h),
               padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
@@ -210,7 +218,7 @@ class _AppointmentConpleteScreenState extends State<AppointmentCompleteScreen> w
             duration: const Duration(seconds: 1),
             child: Container(
               height: 65.h,
-              width: 330.h,
+              width: 330.w,
               margin: EdgeInsets.only(bottom: 15.h),
               padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
@@ -272,7 +280,7 @@ class _AppointmentConpleteScreenState extends State<AppointmentCompleteScreen> w
             duration: const Duration(seconds: 1),
             child: Container(
               height: 50.h,
-              width: 330.h,
+              width: 330.w,
               padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
                 color: Colors.white12,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medical_appointment_app/constant/constant.dart';
 import 'package:medical_appointment_app/constant/text_widget.dart';
-import 'package:medical_appointment_app/screens/appintment_complete.dart';
 import 'package:medical_appointment_app/screens/calling_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -20,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool tapAppointment = false;
   bool getAppointment = false;
 
+  double opacityFirst = 0.1;
   double opacity = 0.1;
   double doctorWidth = 0;
   double doctorHeight = 0;
@@ -43,8 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
     await Future.delayed(const Duration(milliseconds: 1000));
     setState(() {
       animate = true;
-      opacity = 1;
       height = 150.h;
+      opacityFirst = 1;
       listViewHeight = 150.h;
       testH = 73.h;
     });
@@ -53,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future doctorProfileAnimation() async {
     await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
+      opacity = 1;
       doctorName = true;
       doctorWidth = 70.h;
       doctorHeight = 70.h;
@@ -73,56 +74,66 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /// profile list tile
-              ListTile(
-                leading: Container(
-                  height: 35.h,
-                  width: 35.h,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, image: DecorationImage(image: AssetImage("assets/images/girl_profile.jpg"), fit: BoxFit.cover)),
-                ),
-                horizontalTitleGap: 10.w,
-                minLeadingWidth: 30.w,
-                contentPadding: EdgeInsets.symmetric(horizontal: 15.w),
-                title: CustomText(
-                  "Anna Baker",
-                  fontWeight: FontWeight.w500,
-                  // color: kDarkBlue,
-                ),
-                trailing: Wrap(
-                  spacing: 10.w,
-                  children: <Widget>[
-                    const Icon(
-                      Icons.search,
-                      color: kDarkBlue,
-                    ), // icon-1
-                    Stack(
-                      children: [
-                        Icon(Icons.notifications, color: kDarkBlue),
-                        Positioned(top: 4.h, right: 4.w, child: CircleAvatar(radius: 3.r, backgroundColor: kLightBlue))
-                      ],
-                    ),
-                  ],
+              AnimatedOpacity(
+                opacity: opacityFirst,
+                duration: const Duration(milliseconds: 800),
+                curve: Curves.easeIn,
+                child: ListTile(
+                  leading: Container(
+                    height: 35.h,
+                    width: 35.h,
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, image: DecorationImage(image: AssetImage("assets/images/girl_profile.jpg"), fit: BoxFit.cover)),
+                  ),
+                  horizontalTitleGap: 10.w,
+                  minLeadingWidth: 30.w,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 15.w),
+                  title: CustomText(
+                    "Anna Baker",
+                    fontWeight: FontWeight.w500,
+                    // color: kDarkBlue,
+                  ),
+                  trailing: Wrap(
+                    spacing: 10.w,
+                    children: <Widget>[
+                      const Icon(
+                        Icons.search,
+                        color: kDarkBlue,
+                      ), // icon-1
+                      Stack(
+                        children: [
+                          Icon(Icons.notifications, color: kDarkBlue),
+                          Positioned(top: 4.h, right: 4.w, child: CircleAvatar(radius: 3.r, backgroundColor: kLightBlue))
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 15.h),
 
               /// appointment title
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: CustomText(
-                  'Upcoming appointment',
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w500,
+              AnimatedOpacity(
+                opacity: opacityFirst,
+                duration: const Duration(milliseconds: 800),
+                curve: Curves.easeIn,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
+                  child: CustomText(
+                    'Upcoming appointment',
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
 
               /// doctor profile container
               SizedBox(
-                height: /*getAppointment ?*/ 240.h /*: 190.h*/,
+                height: getAppointment ? 240.h : 190.h,
                 child: Stack(
                   children: [
                     AnimatedContainer(
-                      duration: const Duration(seconds: 1),
+                      duration: const Duration(milliseconds: 800),
                       height: height,
                       width: double.infinity,
                       onEnd: () async {
@@ -148,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: kLightBlue,
                         borderRadius: BorderRadius.circular(15.r),
                       ),
-                      child: visible == false
+                      child: !visible
                           ? const SizedBox()
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Center(
                                             child: AnimatedContainer(
-                                              duration: const Duration(seconds: 1),
+                                              duration: const Duration(milliseconds: 800),
                                               height: doctorHeight,
                                               width: doctorWidth,
                                               decoration: BoxDecoration(
@@ -179,47 +190,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                     SizedBox(width: 8.w),
                                     Stack(
                                       children: [
-                                        // AnimatedOpacity(
-                                        //   opacity: opacity,
-                                        //   duration: const Duration(milliseconds: 800),
-                                        //   curve: Curves.easeIn,
-                                        //   child:
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            AnimatedOpacity(
-                                              opacity: opacity,
-                                              duration: const Duration(milliseconds: 800),
-                                              curve: Curves.easeIn,
-                                              child: CustomText(
+                                        AnimatedOpacity(
+                                          opacity: opacity,
+                                          duration: const Duration(milliseconds: 700),
+                                          curve: Curves.easeIn,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              CustomText(
                                                 'Dr.Jonathan Bells',
                                                 fontSize: 17.sp,
                                                 color: kWhiteColor,
                                                 fontWeight: FontWeight.w500,
                                               ),
-                                            ),
-                                            CustomText(
-                                              'Therapist',
-                                              fontSize: 14.sp,
-                                              color: kWhiteColor,
-                                              fontWeight: FontWeight.w300,
-                                            ),
-                                            SizedBox(height: 8.h),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(10.r),
+                                              CustomText(
+                                                'Therapist',
+                                                fontSize: 14.sp,
+                                                color: kWhiteColor,
+                                                fontWeight: FontWeight.w300,
                                               ),
-                                              padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
-                                              child: Row(
-                                                children: [
-                                                  Icon(Icons.star_rounded, color: Colors.amber, size: 12.sp),
-                                                  CustomText('4.8', fontSize: 10.sp, fontWeight: FontWeight.w600)
-                                                ],
-                                              ),
-                                            )
-                                          ],
+                                              SizedBox(height: 8.h),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(10.r),
+                                                ),
+                                                padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(Icons.star_rounded, color: Colors.amber, size: 12.sp),
+                                                    CustomText('4.8', fontSize: 10.sp, fontWeight: FontWeight.w600)
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                         // ),
                                       ],
@@ -241,17 +247,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onTap: () {
                                     setState(() {
                                       if (!getAppointment) {
-                                        height = 200;
+                                        height = 200.h;
                                         tapAppointment = true;
                                       } else {
                                         getAppointment = false;
-                                        height = 150;
+                                        height = 150.h;
                                         tapAppointment = false;
                                       }
                                     });
                                   },
                                   child: AnimatedContainer(
-                                    duration: const Duration(seconds: 1),
+                                    duration: const Duration(milliseconds: 800),
                                     height: 35.h,
                                     width: calenderWidth,
                                     padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -259,27 +265,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: Colors.black12,
                                       borderRadius: BorderRadius.circular(8.r),
                                     ),
-                                    child: getAppointment
-                                        ? Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Icon(Icons.electric_bolt, size: 20.sp, color: kWhiteColor),
-                                              SizedBox(width: 7.w),
-                                              CustomText("It's began! The doctor is waiting for you.",
-                                                  color: kWhiteColor, fontSize: 12.sp, fontWeight: FontWeight.w400),
-                                            ],
-                                          )
-                                        : Row(
-                                            children: [
-                                              Icon(Icons.date_range, size: 20.sp, color: kWhiteColor),
-                                              SizedBox(width: 3.w),
-                                              CustomText('Today, September 2', color: kWhiteColor, fontSize: 11.sp, fontWeight: FontWeight.w300),
-                                              const Spacer(),
-                                              Icon(Icons.access_time_filled, size: 20.sp, color: kWhiteColor),
-                                              SizedBox(width: 3.w),
-                                              CustomText('10:00 - 11:00 AM', color: kWhiteColor, fontSize: 11.sp, fontWeight: FontWeight.w300),
-                                            ],
-                                          ),
+                                    child: visible
+                                        ? getAppointment
+                                            ? Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(Icons.electric_bolt, size: 20.sp, color: kWhiteColor),
+                                                  SizedBox(width: 7.w),
+                                                  CustomText("It's began! The doctor is waiting for you.",
+                                                      color: kWhiteColor, fontSize: 12.sp, fontWeight: FontWeight.w400),
+                                                ],
+                                              )
+                                            : Row(
+                                                children: [
+                                                  Icon(Icons.date_range, size: 20.sp, color: kWhiteColor),
+                                                  SizedBox(width: 3.w),
+                                                  CustomText('Today, September 2', color: kWhiteColor, fontSize: 11.sp, fontWeight: FontWeight.w300),
+                                                  const Spacer(),
+                                                  Icon(Icons.access_time_filled, size: 20.sp, color: kWhiteColor),
+                                                  SizedBox(width: 3.w),
+                                                  CustomText('10:00 - 11:00 AM', color: kWhiteColor, fontSize: 11.sp, fontWeight: FontWeight.w300),
+                                                ],
+                                              )
+                                        : const SizedBox(),
                                   ),
                                 ),
                                 getAppointment
@@ -322,12 +330,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// medicine title
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: CustomText(
-                  "Today's Medicines",
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w500,
+              AnimatedOpacity(
+                opacity: opacityFirst,
+                duration: const Duration(milliseconds: 800),
+                curve: Curves.easeIn,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
+                  child: CustomText(
+                    "Today's Medicines",
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
 
@@ -339,14 +352,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Stack(
                     children: [
                       AnimatedContainer(
-                        duration: const Duration(seconds: 1),
+                        duration: const Duration(milliseconds: 700),
                         height: listViewHeight,
                         child: ListView.builder(
                           itemCount: medicineList.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             return Container(
-                              // duration: const Duration(seconds: 1),
                               height: listViewHeight,
                               width: 145.w,
                               margin: EdgeInsets.only(right: 15.w, left: index == 0 ? 15.w : 0),
@@ -355,7 +367,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: kLightGrey,
                                 borderRadius: BorderRadius.circular(15.r),
                               ),
-                              child: visible == false
+                              child: !visible
                                   ? const SizedBox()
                                   : Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -389,15 +401,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         SizedBox(height: 7.h),
-                                        CustomText(
-                                          medicineList[index].name!,
-                                          fontWeight: FontWeight.w500,
+                                        AnimatedOpacity(
+                                          opacity: opacity,
+                                          duration: const Duration(milliseconds: 600),
+                                          curve: Curves.easeIn,
+                                          child: CustomText(
+                                            medicineList[index].name!,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
                                         SizedBox(height: 3.h),
-                                        CustomText(medicineList[index].scheduleTime!, color: kGreyColor, fontSize: 13.sp),
+                                        AnimatedOpacity(
+                                            opacity: opacity,
+                                            duration: const Duration(milliseconds: 600),
+                                            curve: Curves.easeIn,
+                                            child: CustomText(medicineList[index].scheduleTime!, color: kGreyColor, fontSize: 13.sp)),
                                         SizedBox(height: 12.h),
                                         AnimatedContainer(
-                                          duration: const Duration(seconds: 1),
+                                          duration: const Duration(milliseconds: 800),
                                           height: 22.h,
                                           width: medicineTimeW,
                                           decoration: BoxDecoration(
@@ -426,23 +447,28 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// medical test title
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText(
-                      "Medical Test",
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    CustomText(
-                      "All",
-                      fontSize: 16.sp,
-                      color: kLightBlue,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ],
+              AnimatedOpacity(
+                opacity: opacityFirst,
+                duration: const Duration(milliseconds: 800),
+                curve: Curves.easeIn,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        "Medical Test",
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      CustomText(
+                        "All",
+                        fontSize: 16.sp,
+                        color: kLightBlue,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
@@ -451,16 +477,16 @@ class _HomeScreenState extends State<HomeScreen> {
               /// medical test list
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      curve: Curves.easeInOut,
-                      type: PageTransitionType.scale,
-                      alignment: Alignment.center,
-                      duration: Duration(milliseconds: 800),
-                      child: const AppointmentCompleteScreen(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   PageTransition(
+                  //     curve: Curves.easeInOut,
+                  //     type: PageTransitionType.scale,
+                  //     alignment: Alignment.center,
+                  //     duration: const Duration(milliseconds: 800),
+                  //     child: const AppointmentCompleteScreen(),
+                  //   ),
+                  // );
                 },
                 child: AnimatedContainer(
                   duration: const Duration(seconds: 1),
@@ -473,67 +499,72 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(15.r),
                   ),
                   child: !visible
-                      ? SizedBox()
-                      : Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Container(
-                                  height: 15.h,
-                                  width: 15.h,
-                                  padding: EdgeInsets.all(10.r),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(3.r),
-                                    color: kLightRed,
-                                    //     fit: BoxFit.cover),
+                      ? const SizedBox()
+                      : AnimatedOpacity(
+                          opacity: opacity,
+                          duration: const Duration(milliseconds: 600),
+                          curve: Curves.easeIn,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    height: 15.h,
+                                    width: 15.h,
+                                    padding: EdgeInsets.all(10.r),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(3.r),
+                                      color: kLightRed,
+                                      //     fit: BoxFit.cover),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(width: 7.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText(
-                                  'biochemical blood test',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16.sp,
-                                ),
-                                SizedBox(height: 3.h),
-                                Row(
-                                  children: [
-                                    CustomText('Deviation', fontWeight: FontWeight.w500, color: kLightRed, fontSize: 13.sp),
-                                    SizedBox(width: 5.w),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: kLightRed,
-                                        borderRadius: BorderRadius.circular(10.r),
-                                      ),
-                                      padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
-                                      child: Row(
-                                        children: [
-                                          Icon(Icons.arrow_upward, color: kWhiteColor, size: 12.sp),
-                                          SizedBox(width: 3.w),
-                                          CustomText(
-                                            '35%',
-                                            fontSize: 10.sp,
-                                            fontWeight: FontWeight.w600,
-                                            color: kWhiteColor,
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Spacer(),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              color: kGreyColor,
-                            ),
-                          ],
+                                ],
+                              ),
+                              SizedBox(width: 7.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomText(
+                                    'biochemical blood test',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16.sp,
+                                  ),
+                                  SizedBox(height: 3.h),
+                                  Row(
+                                    children: [
+                                      CustomText('Deviation', fontWeight: FontWeight.w500, color: kLightRed, fontSize: 13.sp),
+                                      SizedBox(width: 5.w),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: kLightRed,
+                                          borderRadius: BorderRadius.circular(10.r),
+                                        ),
+                                        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 6.w),
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.arrow_upward, color: kWhiteColor, size: 12.sp),
+                                            SizedBox(width: 3.w),
+                                            CustomText(
+                                              '35%',
+                                              fontSize: 10.sp,
+                                              fontWeight: FontWeight.w600,
+                                              color: kWhiteColor,
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: kGreyColor,
+                              ),
+                            ],
+                          ),
                         ),
                 ),
               )

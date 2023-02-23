@@ -42,6 +42,13 @@ dependencies:
   lottie: ^2.2.0
   page_transition: ^2.0.9
 
+  #video play
+  video_player: ^2.5.2
+
+  #camera preview
+  camera: ^0.10.3+1
+  permission_handler: ^10.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -69,6 +76,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/lottie/
+    - assets/video/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

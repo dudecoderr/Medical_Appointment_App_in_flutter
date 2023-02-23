@@ -31,10 +31,11 @@ class _BottomNavigationTabState extends State<BottomNavigationTab> {
             // _pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
           }),
           items: [
-            BottomNavyBarItem(icon: const Icon(Icons.home), title: const Text('Home'), activeColor: kLightBlue),
-            BottomNavyBarItem(icon: const Icon(Icons.grid_view_rounded), title: const Text('Category'), activeColor: kLightBlue),
-            BottomNavyBarItem(icon: const Icon(Icons.favorite), title: const Text('Favorite'), activeColor: kLightBlue),
-            BottomNavyBarItem(icon: const Icon(Icons.more_horiz), title: const Text('More'), activeColor: kLightBlue),
+            BottomNavyBarItem(icon: const Icon(Icons.home), title: const Text('Home'), activeColor: kLightBlue, inactiveColor: kGreyColor),
+            BottomNavyBarItem(
+                icon: const Icon(Icons.grid_view_rounded), title: const Text('Category'), activeColor: kLightBlue, inactiveColor: kGreyColor),
+            BottomNavyBarItem(icon: const Icon(Icons.favorite), title: const Text('Favorite'), activeColor: kLightBlue, inactiveColor: kGreyColor),
+            BottomNavyBarItem(icon: const Icon(Icons.more_horiz), title: const Text('More'), activeColor: kLightBlue, inactiveColor: kGreyColor),
           ],
         ));
   }
