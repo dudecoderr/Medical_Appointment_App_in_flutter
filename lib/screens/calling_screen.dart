@@ -21,9 +21,11 @@ class CallingScreen extends StatefulWidget {
   State<CallingScreen> createState() => _CallingScreenState();
 }
 
-class _CallingScreenState extends State<CallingScreen> {
+class _CallingScreenState extends State<CallingScreen> with SingleTickerProviderStateMixin {
   VideoPlayerController? controller;
   CameraController? cameraCtrl;
+
+  AnimationController? animationController;
   late Timer timer;
   Duration duration = const Duration();
   Duration countdownDuration = const Duration();
@@ -48,6 +50,16 @@ class _CallingScreenState extends State<CallingScreen> {
   }
 
   Future startCall() async {
+    animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 200),
+      lowerBound: 0.0,
+      upperBound: 0.2,
+    );
+    animationController!.addListener(() {
+      setState(() {});
+    });
+
     if (await Permission.microphone.request().isGranted && await Permission.camera.request().isGranted) {
       controller = VideoPlayerController.asset('assets/video/doctor_video.mp4')
         ..initialize()
@@ -81,18 +93,16 @@ class _CallingScreenState extends State<CallingScreen> {
   }
 
   void startTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
-  }
-
-  Future<void> addTime() async {
-    const addSeconds = 1;
-    setState(() {
-      final seconds = duration.inSeconds + addSeconds;
-      if (seconds < 0) {
-        timer.cancel();
-      } else {
-        duration = Duration(seconds: seconds);
-      }
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      const addSeconds = 1;
+      setState(() {
+        final seconds = duration.inSeconds + addSeconds;
+        if (seconds < 0) {
+          timer.cancel();
+        } else {
+          duration = Duration(seconds: seconds);
+        }
+      });
     });
   }
 
@@ -107,6 +117,7 @@ class _CallingScreenState extends State<CallingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double scale = 1 - animationController!.value;
     return Scaffold(
       body: Stack(
         children: [
@@ -201,7 +212,13 @@ class _CallingScreenState extends State<CallingScreen> {
                     backgroundColor: kWhiteColor,
                     child: Icon(Icons.videocam_off, color: kDarkGrey, size: 22.sp),
                   ),
-                  InkWell(
+                  GestureDetector(
+                    onTapUp: (TapUpDetails details) {
+                      animationController!.reverse();
+                    },
+                    onTapDown: (TapDownDetails details) {
+                      animationController!.forward();
+                    },
                     onTap: () {
                       Navigator.pushReplacement(
                         context,
@@ -214,10 +231,13 @@ class _CallingScreenState extends State<CallingScreen> {
                         ),
                       );
                     },
-                    child: CircleAvatar(
-                      radius: 26.r,
-                      backgroundColor: kLightRed,
-                      child: Icon(Icons.call_end_rounded, color: kWhiteColor, size: 20.sp),
+                    child: Transform.scale(
+                      scale: scale,
+                      child: CircleAvatar(
+                        radius: 26.r,
+                        backgroundColor: kLightRed,
+                        child: Icon(Icons.call_end_rounded, color: kWhiteColor, size: 20.sp),
+                      ),
                     ),
                   ),
                   CircleAvatar(
