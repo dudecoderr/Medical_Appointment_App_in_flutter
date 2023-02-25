@@ -13,7 +13,7 @@ class BottomNavigationTab extends StatefulWidget {
 
 class _BottomNavigationTabState extends State<BottomNavigationTab> {
   int currentIndex = 0;
-  List screens = [HomeScreen(), HomeScreen(), HomeScreen(), HomeScreen()];
+  List screens = const [HomeScreen(), HomeScreen(), HomeScreen(), HomeScreen()];
 
   @override
   Widget build(BuildContext context) {
