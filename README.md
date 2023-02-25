@@ -21,5 +21,5 @@ git link        [https://github.com/dudecoderr/Medical_Appointment_App_in_flutte
 reference link  [https://dribbble.com/shots/20448012-Medical-Appointment-App]
 
 <p align="center">
-<img src="https://github.com/dudecoderr/Medical_Appointment_App_in_flutter/master/assets/images/Readme.jpg" width="600px">
+<img src="https://raw.githubusercontent.com/dudecoderr/Medical_Appointment_App_in_flutter/master/assets/images/Readme.jpg" width="600px">
 </p>
