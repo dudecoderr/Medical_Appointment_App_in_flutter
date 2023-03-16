@@ -270,10 +270,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ? Row(
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
-                                                  Icon(Icons.electric_bolt, size: 20.sp, color: kWhiteColor),
+                                                  Icon(Icons.electric_bolt, size: 18.sp, color: kWhiteColor),
                                                   SizedBox(width: 7.w),
                                                   CustomText("It's began! The doctor is waiting for you.",
-                                                      color: kWhiteColor, fontSize: 12.sp, fontWeight: FontWeight.w400),
+                                                      color: kWhiteColor, fontSize: 11.sp, fontWeight: FontWeight.w400),
                                                 ],
                                               )
                                             : Row(

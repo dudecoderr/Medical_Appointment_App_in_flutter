@@ -39,6 +39,8 @@ class _CallingScreenState extends State<CallingScreen> with SingleTickerProvider
   @override
   void initState() {
     startCall();
+    startTimer();
+    animationOpacity();
     super.initState();
   }
 
@@ -60,7 +62,7 @@ class _CallingScreenState extends State<CallingScreen> with SingleTickerProvider
       setState(() {});
     });
 
-    if (await Permission.microphone.request().isGranted && await Permission.camera.request().isGranted) {
+    // if (await Permission.microphone.request().isGranted && await Permission.camera.request().isGranted) {
       controller = VideoPlayerController.asset('assets/video/doctor_video.mp4')
         ..initialize()
         ..setLooping(true)
@@ -82,7 +84,7 @@ class _CallingScreenState extends State<CallingScreen> with SingleTickerProvider
 
       startTimer();
       animationOpacity();
-    }
+    // }
   }
 
   animationOpacity() async {
@@ -146,20 +148,26 @@ class _CallingScreenState extends State<CallingScreen> with SingleTickerProvider
               Container(
                 height: (MediaQuery.of(context).size.height / 2) - 3.h,
                 decoration: BoxDecoration(
-                  color: kGreyColor,
+                  color: kGreyColor.withOpacity(0.5),
+                  border: Border.all(color: kLightBlue, width: 3.r),
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8.r),
-                    topRight: Radius.circular(8.r),
+                    bottomLeft: Radius.circular(8.r),
+                    bottomRight: Radius.circular(8.r),
                   ),
                 ),
-                child: cameraCtrl != null
-                    ? AspectRatio(aspectRatio: MediaQuery.of(context).size.height / 2, child: CameraPreview(cameraCtrl!))
+                child: controller != null
+                    ?
+                // ? AspectRatio(
+                //     aspectRatio: controller!.value.aspectRatio,
+                //     child:
+                VideoPlayer(controller!)
+                // )
                     : const SizedBox(),
               ),
             ],
           ),
           Positioned(
-            top: 50.h,
+            top:0.h,
             left: 15.w,
             // right: 100.w,
             child: AnimatedOpacity(
