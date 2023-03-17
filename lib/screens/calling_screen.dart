@@ -23,7 +23,8 @@ class CallingScreen extends StatefulWidget {
 
 class _CallingScreenState extends State<CallingScreen> with SingleTickerProviderStateMixin {
   VideoPlayerController? controller;
-  CameraController? cameraCtrl;
+  VideoPlayerController? controller1;
+  // CameraController? cameraCtrl;
 
   AnimationController? animationController;
   late Timer timer;
@@ -46,7 +47,7 @@ class _CallingScreenState extends State<CallingScreen> with SingleTickerProvider
 
   @override
   void dispose() {
-    cameraCtrl!.dispose();
+    // cameraCtrl!.dispose();
     timer.cancel();
     super.dispose();
   }
@@ -68,22 +69,26 @@ class _CallingScreenState extends State<CallingScreen> with SingleTickerProvider
         ..setLooping(true)
         ..play();
 
-      cameraCtrl = CameraController(cameras![1], ResolutionPreset.high);
-      cameraCtrl!.initialize().then((_) {
-        setState(() {});
-      }).catchError((Object e) {
-        if (e is CameraException) {
-          switch (e.code) {
-            case 'CameraAccessDenied':
-              break;
-            default:
-              break;
-          }
-        }
-      });
+    controller1 = VideoPlayerController.asset('assets/video/patient_video.mp4')
+      ..initialize()
+      ..setLooping(true)
+      ..play();
+      // cameraCtrl = CameraController(cameras![1], ResolutionPreset.high);
+      // cameraCtrl!.initialize().then((_) {
+      //   setState(() {});
+      // }).catchError((Object e) {
+      //   if (e is CameraException) {
+      //     switch (e.code) {
+      //       case 'CameraAccessDenied':
+      //         break;
+      //       default:
+      //         break;
+      //     }
+      //   }
+      // });
 
-      startTimer();
-      animationOpacity();
+      // startTimer();
+      // animationOpacity();
     // }
   }
 
@@ -149,25 +154,25 @@ class _CallingScreenState extends State<CallingScreen> with SingleTickerProvider
                 height: (MediaQuery.of(context).size.height / 2) - 3.h,
                 decoration: BoxDecoration(
                   color: kGreyColor.withOpacity(0.5),
-                  border: Border.all(color: kLightBlue, width: 3.r),
+                  // border: Border.all(color: kLightBlue, width: 3.r),
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(8.r),
                     bottomRight: Radius.circular(8.r),
                   ),
                 ),
-                child: controller != null
+                child: controller1 != null
                     ?
                 // ? AspectRatio(
                 //     aspectRatio: controller!.value.aspectRatio,
                 //     child:
-                VideoPlayer(controller!)
+                VideoPlayer(controller1!)
                 // )
                     : const SizedBox(),
               ),
             ],
           ),
           Positioned(
-            top:0.h,
+            top:40.h,
             left: 15.w,
             // right: 100.w,
             child: AnimatedOpacity(

@@ -15,6 +15,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool animate = false;
   bool visible = false;
+  bool visibleCal = false;
+  bool visibleButton = false;
   bool doctorName = false;
   bool tapAppointment = false;
   bool getAppointment = false;
@@ -26,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double calenderWidth = 0;
   double appointmentW = 0;
   double appointmentH = 0;
-  double medicineTimeW = 0;
+  double medicineTimeW = 0.w;
   double height = 0.h;
   double listViewHeight = 0.h;
   double testH = 0.h;
@@ -265,7 +267,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: Colors.black12,
                                       borderRadius: BorderRadius.circular(8.r),
                                     ),
-                                    child: visible
+                                    onEnd: (){
+                                      setState(() {
+                                        visibleCal = true;
+                                      });
+                                    },
+                                    child: visibleCal
                                         ? getAppointment
                                             ? Row(
                                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -425,7 +432,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             color: medicineList[index].time! != 'Taken' ? kOrange : kLightBlue,
                                             borderRadius: BorderRadius.circular(13.r),
                                           ),
-                                          child: Row(
+                                          onEnd: (){
+
+                                          },
+                                          child:visibleCal ? Row(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               CustomText(medicineList[index].time!, color: kWhiteColor, fontSize: 10.sp, fontWeight: FontWeight.w400),
@@ -433,7 +443,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               Icon(medicineList[index].time! == 'Taken' ? Icons.download_done_outlined : Icons.access_time_filled,
                                                   size: 15.sp, color: kWhiteColor),
                                             ],
-                                          ),
+                                          ) : SizedBox(),
                                         ),
                                       ],
                                     ),
@@ -493,7 +503,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: testH,
                   width: 330.h,
                   margin: EdgeInsets.symmetric(horizontal: 15.w),
-                  padding: EdgeInsets.all(16.w),
+                  padding:EdgeInsets.only(left: 15.w,right: 15.w,top: 16.h),
                   decoration: BoxDecoration(
                     color: kLightGrey,
                     borderRadius: BorderRadius.circular(15.r),
@@ -502,7 +512,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? const SizedBox()
                       : AnimatedOpacity(
                           opacity: opacity,
-                          duration: const Duration(milliseconds: 600),
+                          duration: const Duration(seconds: 3),
                           curve: Curves.easeIn,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -530,7 +540,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 16.sp,
                                   ),
-                                  SizedBox(height: 3.h),
+                                  SizedBox(height: 7.h),
                                   Row(
                                     children: [
                                       CustomText('Deviation', fontWeight: FontWeight.w500, color: kLightRed, fontSize: 13.sp),
